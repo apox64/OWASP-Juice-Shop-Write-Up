@@ -2,23 +2,11 @@
 
 * [juice-shop](https://github.com/bkimminich/juice-shop) by [@bkimminich](https://github.com/bkimminich)
 * write-up by [@apox64](https://github.com/apox64)
-
-<div class='block'>
-    <span class='badge icon icon-versions'>v2.17.0</span>
-    <span class='badge badge-info icon icon-light-bulb'>36 challenges</span>
-    <span class='badge badge-success icon icon-light-bulb'>35 solved</span>
-    <span class='badge badge-error icon icon-light-bulb'>1 unsolved</span>
-</div>
-
-<progress class='inline-block' max='100' value='97'></progress>
-<span class='inline-block'>97%</span>
-
-Continue Code:
-
-<span class='badge badge-error icon icon-circle-slash'>broke for v2.18.0</span>
-
-Z8t1FMsrHQIeiau6CKS8crf6UXhxTPtLFGs0HbI7ixu0CzSlcgfyUahxT3tpFgs6HBIr
-
+* current status:
+  * v2.17.0
+  * 35/36 challenges solved (97%)
+  * Continue Code: Z8t1FMsrHQIeiau6CKS8crf6UXhxTPtLFGs0HbI7ixu0CzSlcgfyUahxT3tpFgs6HBIr (broke for v2.18.0)
+  
 ## Tools
 * Kali Linux (2016.2) tools:
   * Burp Suite
@@ -28,35 +16,31 @@ Z8t1FMsrHQIeiau6CKS8crf6UXhxTPtLFGs0HbI7ixu0CzSlcgfyUahxT3tpFgs6HBIr
 * _search engine (Internet)_
 
 ## Notes
-* Start Burp and set a proxy to 127.0.0.1, port 8080 (this is the Burp proxy). You can use the FireFox Plug-In 'FoxyProxy' to quickly change your connection back and forth. Have Burp ready in the background, since many challenges can be solved like this.
+* Start Burp and set a proxy to 127.0.0.1, port 8080 (this is the Burp proxy). You can use the FireFox Plug-In 'FoxyProxy Basic' to quickly change your connection back and forth. Have Burp ready in the background, since many challenges can be solved like this.
 * If you're using Burp, you might need to add the Burp CA certificate to the known certificates of your browser.
 
 <!------------------------------- 1 Star Challenges ------------------------------->
 
 ## 1 Star Challenges
-<div class='block'>
-    <span class='badge badge-info icon icon-star'>1</span>
-  <span class='badge badge-success icon icon-check'>done (7/7)</span>
-</div>
 
 #### 1: "Find the carefully hidden 'Score Board' page."
-<span class='badge badge-success icon icon-check'>no pre-solved challenge necessary</span>
+* no pre-solved challenge necessary
 
 Go to `http://192.168.99.101:3000/#/score-board` to show the scoreboard. This was solved by looking at the HTML source code of the website.
 
 #### 2: "Provoke an error that is not very gracefully handled."
-<span class='badge badge-success icon icon-check'>no pre-solved challenge necessary</span>
+* no pre-solved challenge necessary
 
 Many ways to solve this. Just search for `' something`. This should return something like
 "No results found.", but it doesn't.
 
 #### 3: "XSS Tier 1: Perform a reflected XSS attack."
-<span class='badge badge-success icon icon-check'>no pre-solved challenge necessary</span>
+* no pre-solved challenge necessary
 
 Just put the given string in the search field to reflect the alert: `<script>alert("XSS1")</script>` to solve the challenge.
 
 #### 4: "Get rid of all 5-star customer feedback."
-<span class='badge badge-warning icon icon-history'>solve challenge 8 first</span>
+* solve challenge 8 first
 
 Manually delete all 5 star customer-feedback from the /administrator page (1 total).
 
