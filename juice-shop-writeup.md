@@ -323,7 +323,7 @@ Let's try to apply this to bjoern's mail address we can get from the `/adminstra
 ## 4 Star Challenges
 
 #### 30: "XSS Tier 4: Perform a persisted XSS attack bypassing a server-side security mechanism."
-* no pre-solved challenge necessary
+* solve challenge 24 first
 
 Let's see what the developer implemented on the server side: "sanitize-html": "1.4.2"
 There is an issue that sanitizing is not used recursively, so if we put a script into a script, only the outer script will be santized and the inner script will still run.
