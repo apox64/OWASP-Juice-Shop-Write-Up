@@ -19,6 +19,14 @@
 * Start Burp and set a proxy to 127.0.0.1, port 8080 (this is the Burp proxy). You can use the FireFox Plug-In 'FoxyProxy Basic' to quickly change your connection back and forth. Have Burp ready in the background, since many challenges can be solved like this.
 * If you're using Burp, you might need to add the Burp CA certificate to the known certificates of your browser.
 
+## Challenges
+* [1 Star Challenges](#1-star-challenges)
+* [2 Star Challenges](#2-star-challenges)
+* [3 Star Challenges](#3-star-challenges)
+* [4 Star Challenges](#4-star-challenges)
+* [5 Star Challenges](#5-star-challenges)
+
+
 <!------------------------------- 1 Star Challenges ------------------------------->
 
 ## 1 Star Challenges
