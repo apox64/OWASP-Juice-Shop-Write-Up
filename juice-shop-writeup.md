@@ -6,7 +6,7 @@
   * v2.17.0
   * 35/36 challenges solved (97%)
   * Continue Code: Z8t1FMsrHQIeiau6CKS8crf6UXhxTPtLFGs0HbI7ixu0CzSlcgfyUahxT3tpFgs6HBIr (broke for v2.18.0)
-  
+
 ## Tools
 * Kali Linux (2016.2) tools:
   * Burp Suite
@@ -45,19 +45,19 @@ Just put the given string in the search field to reflect the alert: `<script>ale
 Manually delete all 5 star customer-feedback from the /administrator page (1 total).
 
 #### 5: "Access a confidential document."
-<span class='badge badge-success icon icon-check'>no pre-solved challenge necessary</span>
+* no pre-solved challenge necessary
 
 Use directory buster (dirb) to list folders on the server.
 `dirb "http://192.168.99.101:3000/"`
 Look at the ones with status "code 200". /ftp contains a few files. Download the file "acquisitions.md" from there.
 
 #### 6: "Access the administration section of the store."
-<span class='badge badge-warning icon icon-history'>prequisites: log in as any user</span>
+* prequisites: log in as any user
 
 Just browse to `/#/administration`. This was solved by just guessing.
 
 #### 7: "Give a devastating zero-star feedback to the store."
-<span class='badge badge-success icon icon-check'>no pre-solved challenge necessary</span>
+* no pre-solved challenge necessary
 
 Go to "Contact Us", turn on Burp Intercept, then post a feedback giving any rating and change the value in the body of the intercepted request to `"rating":0`.
 
@@ -65,52 +65,48 @@ Go to "Contact Us", turn on Burp Intercept, then post a feedback giving any rati
 <!------------------------------- 2 Star Challenges ------------------------------->
 
 ## 2 Star Challenges
-<div class='block'>
-    <span class='badge badge-info icon icon-star'>2</span>
-    <span class='badge badge-success icon icon-check'>done (7/7)</span>
-</div>
 
 #### 8: "Log in with the administrator's user account."
-<span class='badge badge-success icon icon-check'>no pre-solved challenge necessary</span>
+* no pre-solved challenge necessary
 
 You get the administrator's email from challenge 6.
 Bypassing the authentication works with a simple manual SQL injection like `something' OR 1=1 --` in the email field. You will be logged in as the administrator.
 
 
 #### 9: "Log in with the administrator's user credentials without previously changing them or applying SQL Injection."
-<span class='badge badge-warning icon icon-history'>solve challenge 19 first</span>
+* solve challenge 19 first
 
 Crack the hash for admin@juice-sh.op retrieved from challenge 19: "Retrieve a list of all user credentials via SQL Injection".
 You can use an online md5 cracker like [hashkiller](https://hashkiller.co.uk/md5-decrypter.aspx) to get the clear text password.
 
 #### 10: "Access someone else's basket."
-<span class='badge badge-warning icon icon-history'>prequisites: log in as any user</span>
+* prequisites: log in as any user
 
 Use Burp Intercept to change the value in the Header `GET /rest/basket/4` to any other number.
 
 #### 11: "Access a salesman's forgotten backup file."
-<span class='badge badge-warning icon icon-history'>solve challenge 5 first</span>
+* solve challenge 5 first
 
 To bypass the error when trying to download a .bak file from the ftp, we can use a nullbyte (%00) to pretend downloading something that's allowed. We need to URL encode the `%` as `%25` followed by the null byte `00` and an allowed ending.
 `/ftp/coupons_2013.md.bak%2500.pdf` let's us download the .md.bak file. Remove the .bak ending and open the file with a text editor.
 
 #### 12: "Change Bender's password into slurmCl4ssic."
-<span class='badge badge-warning icon icon-history'>solve challenge 16 first</span>
+* solve challenge 16 first
 
 Login as Bender. Go to "Change Password" and set "slurmCl4ssic" as the new password.
 
 > NOTE: The md5 hash of "slurmCl4ssic" is 06b0c5c1922ed4ed62a5449dd209c96d. Although Hashkiller currently has no entry for the reversal of this hash, the unsalted "slurmCl4ssic" password is not a safe password as it might be added to the database one day.
 
 #### 13: "Inform the shop about an algorithm or library it should definitely not use the way it does."
-<span class='badge badge-warning icon icon-history'>solve challenge 32 first</span>
+* solve challenge 32 first
 
 The `rot13` algorithm is definitely *not* secure to encode data.
 Also, the `z85` algorithm is not secure.
 
 #### 14: "Order the Christmas special offer of 2014."
-<span class='badge badge-warning icon icon-history'>solve challenge 19 first</span>
+* solve challenge 19 first
 
-<span class='badge badge-warning icon icon-history'>prequisites: log in as any user</span>
+* prequisites: log in as any user
 
 When playing around with the succeeding payload from **challenge 19**'s SQL injection, one will find that the search for `q=something')) UNION ALL SELECT NULL,id,description,price,NULL,NULL,NULL,NULL from products--` displays all products. You can see that our desired product has the id = 9.
 
@@ -121,23 +117,19 @@ Check out and the challenge is solved.
 <!------------------------------- 3 Star Challenges ------------------------------->
 
 ## 3 Star Challenges
-<div class='block'>
-    <span class='badge badge-info icon icon-star'>3</span>
-    <span class='badge badge-success icon icon-check'>done (15/15)</span>
-</div>
 
 #### 15: "Log in with Jim's user account."
-<span class='badge badge-warning icon icon-history'>solve challenge 19 first</span>
+* solve challenge 19 first
 
 Crack the hash for jim@juice-sh.op retrieved from challenge 19: "Retrieve a list of all user credentials via SQL Injection".
 You can use an online md5 cracker like [hashkiller](https://hashkiller.co.uk/md5-decrypter.aspx) to get the clear text password.
 #### 16: "Log in with Bender's user account."
-<span class='badge badge-warning icon icon-history'>solve challenge 19 first</span>
+* solve challenge 19 first
 
 Crack the hash for bender@juice-sh.op retrieved from challenge 19: "Retrieve a list of all user credentials via SQL Injection".
 You can use an online md5 cracker like [hashkiller](https://hashkiller.co.uk/md5-decrypter.aspx) to get the clear text password.
 #### 17: "XSS Tier 2: Perform a persisted XSS attack bypassing a client-side security mechanism."
-<span class='badge badge-success icon icon-check'>no pre-solved challenge necessary</span>
+* no pre-solved challenge necessary
 
 We need to put `<script>alert("XSS2")</script>` somewhere and get it executed, so that it doesn't get filtered out by some JavaScript security mechanism on the client side. Simply pasting it in "Contact Us" doesn't work.
 Another try could be to register a user who has this script in his credentials somewhere and thus _storing_ it on the server.
@@ -149,7 +141,7 @@ We have to escape the quotes in the script like this to solve the challenge:
 `{"email":"user@domain.com<script>alert(\"XSS2\")</script>","password": ...`
 
 #### 18: "XSS Tier 3: Perform a persisted XSS attack without using the frontend application at all."
-<span class='badge badge-success icon icon-check'>no pre-solved challenge necessary</span>
+* no pre-solved challenge necessary
 
 Okay, so if we want to change something somewhere, we can't use HTTP GET, but we need to PUT something somewhere. We will forge our own packet that will update the description of a product containing the script.
 
@@ -174,7 +166,7 @@ Connection: close
 > _You can "turn off" the alert again by just sending the same PUT request, but removing the script, so it doesn't get executed anymore._
 
 #### 19: "Retrieve a list of all user credentials via SQL Injection"
-<span class='badge badge-success icon icon-check'>no pre-solved challenge necessary</span>
+* no pre-solved challenge necessary
 
 We will use the following parameters:
 * URL : http://192.168.99.101:3000
@@ -204,24 +196,24 @@ This payload solves the challenge:
 
 You can now put the hashes into an online md5 cracker like [hashkiller](https://hashkiller.co.uk/md5-decrypter.aspx) and get the clear text passwords.
 #### 20: "Post some feedback in another users name."
-<span class='badge badge-warning icon icon-history'>log in as any user</span>
+* log in as any user
 
 Go to "Contact Us" as any user logged in.
 Again, turn on Burp's Proxy Intercept to be able to edit the packet before actually sending it.
 Enter a different value for `"UserId":` to solve the challenge.
 
 #### 21: "Place an order that makes you rich."
-<span class='badge badge-warning icon icon-history'>log in as any user</span>
+* log in as any user
 
 Log in as any user (a self-registered user also works). Turn on Burp Intercept. Then put some stuff in your basket. Take a look into the intercepted request and change the value `"quantity":` to something negative and forward the request.
 
 #### 22: "Access a developer's forgotten backup file."
-<span class='badge badge-warning icon icon-history'>solve challenge 11 first</span>
+* solve challenge 11 first
 
 Download "package.json.bak" with the same technique as described in challenge 11: "Access a salesman's forgotten backup file."
 
 #### 23: "Change the href of the link within the O-Saft product description into `http://kimminich.de`."
-<span class='badge badge-warning icon icon-history'>solve challenge 18 first</span>
+* solve challenge 18 first
 
 ```
 PUT /api/Products/8 HTTP/1.1
@@ -239,7 +231,7 @@ of ciphers and various SSL configurations.
 > _NOTE: You might need to remove some `\r` (line breaks) that were added for formatting._
 
 #### 24: "Inform the shop about a vulnerable library it is using. (Mention the exact library name and version in your comment.)"
-<span class='badge badge-warning icon icon-history'>solve challenge 22 first</span>
+* solve challenge 22 first
 
 package.json.bak file. Just remove the .bak at the end and open the file to see the packages the developer of the shop used. Under "dependencies" you can find all the used libraries.
 
@@ -276,12 +268,12 @@ Send one of the vulnerable libraries and the version number in the comment box i
 > Although socket.io and sequelize-restful also have known Vulnerabilities, currently only reporting `sanitize-html 1.4.2` or `sequelize 1.7` solve the challenge.
 
 #### 25: "Find the hidden easter egg."
-<span class='badge badge-warning icon icon-history'>solve challenge 11 first</span>
+* solve challenge 11 first
 
 Download "eastere.gg" with the same technique as described in challenge 11: "Access a salesman's forgotten backup file."
 
 #### 26: "Travel back in time to the golden era of web design."
-<span class='badge badge-success icon icon-check'>no pre-solved challenge necessary</span>
+* no pre-solved challenge necessary
 
 When you look at the source of the **HOT**-button you can see that the button is in: `css/geo-bootstrap/img/hot.gif`
 
@@ -297,7 +289,7 @@ In the console the command `document.getElementById("theme").setAttribute("href"
 > NOTE: Changing it back to normal with href: `document.getElementById("theme").setAttribute("href", "bower_components/bootswatch/slate/bootstrap.min.css")` or simply reloading the page.
 
 #### 27: "Upload a file larger than 100 kB."
-<span class='badge badge-warning icon icon-history'>logged in as any user</span>
+* logged in as any user
 
 Let's create file with random content that has a .pdf ending and which is smaller than 100 kb.
 ``` bash
@@ -305,15 +297,15 @@ base64 /dev/urandom | head -c 99900 > random.pdf
 ```
 The resulting file will have a size be 99,9 kb.
 
-Intercept and forward until you find the right packet, scroll down where all the text is and add at least another 101 characters (_or just mash on the keyboard_ <span class='badge icon icon-keyboard'>rage !</span> ).
+Intercept and forward until you find the right packet, scroll down where all the text is and add at least another 101 characters (_or just mash on the keyboard for a while_).
 
 #### 28: "Upload a file that has no .pdf extension."
-<span class='badge badge-warning icon icon-history'>solve challenge 27 first</span>
+* solve challenge 27 first
 
 Repeat the first steps from challenge 27 and intercept the packet again. Change `filename="random.pdf"` to something else. Solved.
 
 #### 29: "Log in with Bjoern's user account without previously changing his password, applying SQL Injection, or hacking his Google account."
-<span class='badge badge-warning icon icon-history'>solve challenge 6 first</span>
+* solve challenge 6 first
 
 Log in with some valid Google Account account `Log in with Google`. Intercept the packets with Burp. Look at the packet that contains a `POST` to `/api/Users/`. In this packet, apparently the new user get's put into the Juice Shop user database. You can see that the password here is not the one you used for the Google login (the Juice Shop never sees this password). So it had to be created somehow ... After playing around a little with different encodings, you can find out that this password is the mail address, encoded with base64.
 Let's try to apply this to bjoern's mail address we can get from the `/adminstration` section. Encode with base64 and login.
@@ -321,13 +313,9 @@ Let's try to apply this to bjoern's mail address we can get from the `/adminstra
 <!------------------------------- 4 Star Challenges ------------------------------->
 
 ## 4 Star Challenges
-<div class='block'>
-    <span class='badge badge-info icon icon-star'>4</span>
-    <span class='badge badge-success icon icon-check'>done (5/5)</span>
-</div>
 
 #### 30: "XSS Tier 4: Perform a persisted XSS attack bypassing a server-side security mechanism."
-<span class='badge badge-success icon icon-check'>no pre-solved challenge necessary</span>
+* no pre-solved challenge necessary
 
 Let's see what the developer implemented on the server side: "sanitize-html": "1.4.2"
 There is an issue that sanitizing is not used recursively, so if we put a script into a script, only the outer script will be santized and the inner script will still run.
@@ -345,19 +333,19 @@ Plus, we need another end tag `</script>` before the last closing script tag to 
 You can post this under "Contact Us" to solve the challenge.
 
 #### 31: "Wherever you go, there you are."
-<span class='badge badge-success icon icon-check'>no pre-solved challenge necessary</span>
+* no pre-solved challenge necessary
 
 The ribbon in the top right corner "Fork me on Github" contains the link `/redirect?to=https://github.com/bkimminich/juice-shop`. As always, when tampering with URLs, we should try null-bytes `%00`. When going to `/redirect?to=/%00https://github.com/bkimminich/juice-shop`, we give the redirect a valid target `https://github.com/bkimminich/juice-shop`, but keep it from actually going there.
 
 #### 32: "Apply some advanced cryptanalysis to find the real easter egg."
-<span class='badge badge-warning icon icon-history'>solve challenge 25 first</span>
+* solve challenge 25 first
 
 In the eastere.gg file from /ftp there is a string `L2d1ci9xcmlmL25lci9mYi9zaGFhbC9ndXJsL3V2cS9uYS9ybmZncmUvcnR0L2p2Z3V2YS9ndXIvcm5mZ3JlL3J0dA==`.
 Decoding this with base64 (Burp Decoder can do this), we get `/gur/qrif/ner/fb/shaal/gurl/uvq/na/rnfgre/rtt/jvguva/gur/rnfgre/rtt`. That looks like a path. It doesn't lead nowhere, but we have to be close (because we can see the slashes). This could be a simple shift cypher. After trying a little bit, we can find out that this is a rot-13 shift.
 Decoding it, we get `the/devs/are/so/funny/they/hid/an/easter/egg/within/the/easter/egg`. Following this link, the challenge is solved. And we get a huge orange in JavaScript as a reward.
 
 #### 33: "Retrieve the language file that never made it into production."
-<span class='badge badge-warning icon icon-history'>solve challenge 5 first</span>
+* solve challenge 5 first
 
 Change the language a few times and look at the HTTP request history.
 You can see that the files are located in the /i18n/ folder and that they have a .json ending.
@@ -392,7 +380,7 @@ dirb "http://192.168.99.100:3000/i18n/" wordlist.txt -X .json
 We can find `tlh.json` with this method and solve the challenge (tlh is Klingon).
 
 #### 34: "Exploit OAuth 2.0 to log in with the Chief Information Security Officer's user account."
-<span class='badge badge-warning icon icon-history'>solve challenge 6 first</span>
+* solve challenge 6 first
 
 Login with a valid Google Account and intercept the communication with Burp.
 Look at the packet containing the `POST` to `/rest/user/login` and manually add the Header: `X-User-Email: ciso@juice-sh.op`. You can leave the Body like it is `({"email":"something@gmail.com","password":"c29tZXRoaW5nQGdtYWlsLmNvbQ==","oauth":true})`.
@@ -401,13 +389,9 @@ Look at the packet containing the `POST` to `/rest/user/login` and manually add 
 <!------------------------------- 5 Star Challenges ------------------------------->
 
 ## 5 Star Challenges
-<div class='block'>
-    <span class='badge badge-info icon icon-star'>5</span>
-    <span class='badge badge-warning icon icon-alert'>in progress (1/2)</span>
-</div>
 
 #### 35: "Forge a coupon code that gives you a discount of at least 80%."
-<span class='badge badge-warning icon icon-history'>solve challenge 11 first</span>
+* solve challenge 11 first
 
 The file "coupons_2013.md" in the /ftp Folder contains some codes.
 These are encoded with "z85" [bkimminich/z85-cli](https://github.com/bkimminich/z85-cli), also in "package.json.bak" under "Dependencies".
@@ -433,4 +417,4 @@ z85 -e "NOV16-90"
 
 This string will give you a z85 encoded value of `pes[Bhz3{y`. Enter it in the coupon option and solve the challenge.
 #### 36: "Fake a continue code that solves only (the non-existent) challenge #99."
-<span class='badge badge-error icon icon-alert'>Not solved yet.</span>
+* Not solved yet.
