@@ -343,8 +343,6 @@ You can post this under "Contact Us" to solve the challenge.
 The ribbon in the top right corner "Fork me on Github" contains the link `/redirect?to=https://github.com/bkimminich/juice-shop`. As always, when tampering with URLs, we should try null-bytes `%00`. When going to `/redirect?to=/%00https://github.com/bkimminich/juice-shop`, we give the redirect a valid target `https://github.com/bkimminich/juice-shop`, but keep it from actually going there.
 
 #### 31: "Change Bender's password into slurmCl4ssic."
-* not solved yet
-
 * solve challenge 15 first
 * be logged in as Bender
 
