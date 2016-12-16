@@ -1,23 +1,24 @@
-# Write-up: OWASP Juice Shop Challenges (v2.17.0)
+# Write-up: OWASP Juice Shop Challenges (v2.19.1)
 
 * [juice-shop](https://github.com/bkimminich/juice-shop) by [@bkimminich](https://github.com/bkimminich)
 * write-up by [@apox64](https://github.com/apox64)
+* influenced by [7 Minute Security (Episode #230)](https://7ms.us/7ms-230-pentesting-owasp-juice-shop-part-1/)
 * current status:
-  * v2.17.0
-  * 35/36 challenges solved (97%)
-  * Continue Code: Z8t1FMsrHQIeiau6CKS8crf6UXhxTPtLFGs0HbI7ixu0CzSlcgfyUahxT3tpFgs6HBIr (broke for v2.18.0)
+  * v2.19.1
+  * 35/37 challenges solved (95%)
+  * Continue Code: n2HouohDtzc5IqT6CXsNFwi2fpSEURHvubhMtEcWIBTkCnsaF4imfrSDUnH6uBh9tNcxTo
 
 ## Tools
 * Kali Linux (2016.2) tools:
   * Burp Suite
   * dirb
   * sqlmap
-* Google Account for challenges 29 & 34 (OAuth2.0)
+* Google Account for challenges 28 & 34 (OAuth2.0)
 * _search engine (Internet)_
 
 ## Notes
-* Start Burp and set a proxy to 127.0.0.1, port 8080 (this is the Burp proxy). You can use the FireFox Plug-In 'FoxyProxy Basic' to quickly change your connection back and forth. Have Burp ready in the background, since many challenges can be solved like this.
-* If you're using Burp, you might need to add the Burp CA certificate to the known certificates of your browser.
+* Start Burp and set a proxy to 127.0.0.1, port 8080 (this is the Burp proxy). You can use the FireFox Plug-In 'FoxyProxy Basic' to quickly switch on/off using a proxy. Have Burp ready in the background, since many challenges can be solved with this tool.
+* You might need to add the Burp CA certificate to the known certificates of your browser.
 
 ## Challenges
 * [1 Star Challenges](#1-star-challenges)
@@ -39,18 +40,19 @@ Go to `http://192.168.99.101:3000/#/score-board` to show the scoreboard. This wa
 #### 2: "Provoke an error that is not very gracefully handled."
 * no pre-solved challenge necessary
 
-Many ways to solve this. Just search for `' something`. This should return something like
-"No results found.", but it doesn't.
+Many ways to solve this. Just search for `' something`.
+
+> This should be properly error-handled showing something like "No results found.", but it doesn't.
 
 #### 3: "XSS Tier 1: Perform a reflected XSS attack."
 * no pre-solved challenge necessary
 
-Just put the given string in the search field to reflect the alert: `<script>alert("XSS1")</script>` to solve the challenge.
+Just put the given string in the search field to reflect the alert `<script>alert("XSS1")</script>` to solve the challenge.
 
 #### 4: "Get rid of all 5-star customer feedback."
 * solve challenge 8 first
 
-Manually delete all 5 star customer-feedback from the /administrator page (1 total).
+Manually delete all 5 star customer-feedback from the `/administration` page (1 total).
 
 #### 5: "Access a confidential document."
 * no pre-solved challenge necessary
@@ -62,7 +64,7 @@ Look at the ones with status "code 200". /ftp contains a few files. Download the
 #### 6: "Access the administration section of the store."
 * prequisites: log in as any user
 
-Just browse to `/#/administration`. This was solved by just guessing.
+Just browse to `/#/administration`. This was solved by just guessing the name from the challenge.
 
 #### 7: "Give a devastating zero-star feedback to the store."
 * no pre-solved challenge necessary
@@ -82,9 +84,9 @@ Bypassing the authentication works with a simple manual SQL injection like `some
 
 
 #### 9: "Log in with the administrator's user credentials without previously changing them or applying SQL Injection."
-* solve challenge 19 first
+* solve challenge 18 first
 
-Crack the hash for admin@juice-sh.op retrieved from challenge 19: "Retrieve a list of all user credentials via SQL Injection".
+Crack the hash for admin@juice-sh.op retrieved from challenge 18: "Retrieve a list of all user credentials via SQL Injection".
 You can use an online md5 cracker like [hashkiller](https://hashkiller.co.uk/md5-decrypter.aspx) to get the clear text password.
 
 #### 10: "Access someone else's basket."
@@ -98,25 +100,18 @@ Use Burp Intercept to change the value in the Header `GET /rest/basket/4` to any
 To bypass the error when trying to download a .bak file from the ftp, we can use a nullbyte (%00) to pretend downloading something that's allowed. We need to URL encode the `%` as `%25` followed by the null byte `00` and an allowed ending.
 `/ftp/coupons_2013.md.bak%2500.pdf` let's us download the .md.bak file. Remove the .bak ending and open the file with a text editor.
 
-#### 12: "Change Bender's password into slurmCl4ssic."
-* solve challenge 16 first
-
-Login as Bender. Go to "Change Password" and set "slurmCl4ssic" as the new password.
-
-> NOTE: The md5 hash of "slurmCl4ssic" is 06b0c5c1922ed4ed62a5449dd209c96d. Although Hashkiller currently has no entry for the reversal of this hash, the unsalted "slurmCl4ssic" password is not a safe password as it might be added to the database one day.
-
-#### 13: "Inform the shop about an algorithm or library it should definitely not use the way it does."
+#### 12: "Inform the shop about an algorithm or library it should definitely not use the way it does."
 * solve challenge 32 first
 
 The `rot13` algorithm is definitely *not* secure to encode data.
 Also, the `z85` algorithm is not secure.
 
-#### 14: "Order the Christmas special offer of 2014."
-* solve challenge 19 first
+#### 13: "Order the Christmas special offer of 2014."
+* solve challenge 18 first
 
 * prequisites: log in as any user
 
-When playing around with the succeeding payload from **challenge 19**'s SQL injection, one will find that the search for `q=something')) UNION ALL SELECT NULL,id,description,price,NULL,NULL,NULL,NULL from products--` displays all products. You can see that our desired product has the id = 9.
+When playing around with the succeeding payload from **challenge 18**'s SQL injection, one will find that the search for `q=something')) UNION ALL SELECT NULL,id,description,price,NULL,NULL,NULL,NULL from products--` displays all products. You can see that our desired product has the id = 9.
 
 Now intercept the request with Burp when you place any other item in your basket and change the value of `"ProductID:"` to `9` to place the Christmas Special Offer 2014 into your basket.
 
@@ -126,17 +121,18 @@ Check out and the challenge is solved.
 
 ## 3 Star Challenges
 
-#### 15: "Log in with Jim's user account."
-* solve challenge 19 first
+#### 14: "Log in with Jim's user account."
+* solve challenge 18 first
 
-Crack the hash for jim@juice-sh.op retrieved from challenge 19: "Retrieve a list of all user credentials via SQL Injection".
+Crack the hash for jim@juice-sh.op retrieved from challenge 18: "Retrieve a list of all user credentials via SQL Injection".
 You can use an online md5 cracker like [hashkiller](https://hashkiller.co.uk/md5-decrypter.aspx) to get the clear text password.
-#### 16: "Log in with Bender's user account."
-* solve challenge 19 first
 
-Crack the hash for bender@juice-sh.op retrieved from challenge 19: "Retrieve a list of all user credentials via SQL Injection".
-You can use an online md5 cracker like [hashkiller](https://hashkiller.co.uk/md5-decrypter.aspx) to get the clear text password.
-#### 17: "XSS Tier 2: Perform a persisted XSS attack bypassing a client-side security mechanism."
+#### 15: "Log in with Bender's user account."
+* solve challenge 34 first
+
+Works exactly like challenge 34 (Option: `X-User-Email`)
+
+#### 16: "XSS Tier 2: Perform a persisted XSS attack bypassing a client-side security mechanism."
 * no pre-solved challenge necessary
 
 We need to put `<script>alert("XSS2")</script>` somewhere and get it executed, so that it doesn't get filtered out by some JavaScript security mechanism on the client side. Simply pasting it in "Contact Us" doesn't work.
@@ -148,7 +144,7 @@ This will return an error, since the first `"` before the `XSS2` ends the string
 We have to escape the quotes in the script like this to solve the challenge:
 `{"email":"user@domain.com<script>alert(\"XSS2\")</script>","password": ...`
 
-#### 18: "XSS Tier 3: Perform a persisted XSS attack without using the frontend application at all."
+#### 17: "XSS Tier 3: Perform a persisted XSS attack without using the frontend application at all."
 * no pre-solved challenge necessary
 
 Okay, so if we want to change something somewhere, we can't use HTTP GET, but we need to PUT something somewhere. We will forge our own packet that will update the description of a product containing the script.
@@ -173,18 +169,18 @@ Connection: close
 
 > _You can "turn off" the alert again by just sending the same PUT request, but removing the script, so it doesn't get executed anymore._
 
-#### 19: "Retrieve a list of all user credentials via SQL Injection"
+#### 18: "Retrieve a list of all user credentials via SQL Injection"
 * no pre-solved challenge necessary
 
 We will use the following parameters:
-* URL : http://192.168.99.101:3000
+* URL : http://192.168.99.100:3000
 * Path : /rest/product/search/
 * Parameter : q
 * Database : sqlite (open information from the website, but sqlmap can find this out too)
 
 So the command look like this:
 
-`sqlmap -u 'http://192.168.99.101:3000/rest/product/search?q=something' -p 'q' --dbms='sqlite'`
+`sqlmap -u 'http://192.168.99.100:3000/rest/product/search?q=something' -p 'q' --dbms='sqlite'`
 
 I had to increase the risk level to 2 to get results:
 
@@ -203,25 +199,26 @@ This payload solves the challenge:
 `q=something')) UNION ALL SELECT NULL,email,password,NULL,NULL,NULL,NULL,NULL from users--`
 
 You can now put the hashes into an online md5 cracker like [hashkiller](https://hashkiller.co.uk/md5-decrypter.aspx) and get the clear text passwords.
-#### 20: "Post some feedback in another users name."
+
+#### 19: "Post some feedback in another users name."
 * log in as any user
 
 Go to "Contact Us" as any user logged in.
 Again, turn on Burp's Proxy Intercept to be able to edit the packet before actually sending it.
 Enter a different value for `"UserId":` to solve the challenge.
 
-#### 21: "Place an order that makes you rich."
+#### 20: "Place an order that makes you rich."
 * log in as any user
 
 Log in as any user (a self-registered user also works). Turn on Burp Intercept. Then put some stuff in your basket. Take a look into the intercepted request and change the value `"quantity":` to something negative and forward the request.
 
-#### 22: "Access a developer's forgotten backup file."
+#### 21: "Access a developer's forgotten backup file."
 * solve challenge 11 first
 
 Download "package.json.bak" with the same technique as described in challenge 11: "Access a salesman's forgotten backup file."
 
-#### 23: "Change the href of the link within the O-Saft product description into `http://kimminich.de`."
-* solve challenge 18 first
+#### 22: "Change the href of the link within the O-Saft product description into `http://kimminich.de`."
+* solve challenge 17 first
 
 ```
 PUT /api/Products/8 HTTP/1.1
@@ -238,7 +235,7 @@ of ciphers and various SSL configurations.
 ```
 > _NOTE: You might need to remove some `\r` (line breaks) that were added for formatting._
 
-#### 24: "Inform the shop about a vulnerable library it is using. (Mention the exact library name and version in your comment.)"
+#### 23: "Inform the shop about a vulnerable library it is using. (Mention the exact library name and version in your comment.)"
 * solve challenge 22 first
 
 package.json.bak file. Just remove the .bak at the end and open the file to see the packages the developer of the shop used. Under "dependencies" you can find all the used libraries.
@@ -275,12 +272,12 @@ Send one of the vulnerable libraries and the version number in the comment box i
 
 > Although socket.io and sequelize-restful also have known Vulnerabilities, currently only reporting `sanitize-html 1.4.2` or `sequelize 1.7` solve the challenge.
 
-#### 25: "Find the hidden easter egg."
+#### 24: "Find the hidden easter egg."
 * solve challenge 11 first
 
 Download "eastere.gg" with the same technique as described in challenge 11: "Access a salesman's forgotten backup file."
 
-#### 26: "Travel back in time to the golden era of web design."
+#### 25: "Travel back in time to the golden era of web design."
 * no pre-solved challenge necessary
 
 When you look at the source of the **HOT**-button you can see that the button is in: `css/geo-bootstrap/img/hot.gif`
@@ -296,7 +293,7 @@ In the console the command `document.getElementById("theme").setAttribute("href"
 
 > NOTE: Changing it back to normal with href: `document.getElementById("theme").setAttribute("href", "bower_components/bootswatch/slate/bootstrap.min.css")` or simply reloading the page.
 
-#### 27: "Upload a file larger than 100 kB."
+#### 26: "Upload a file larger than 100 kB."
 * logged in as any user
 
 Let's create file with random content that has a .pdf ending and which is smaller than 100 kb.
@@ -307,12 +304,12 @@ The resulting file will have a size be 99,9 kb.
 
 Intercept and forward until you find the right packet, scroll down where all the text is and add at least another 101 characters (_or just mash on the keyboard for a while_).
 
-#### 28: "Upload a file that has no .pdf extension."
+#### 27: "Upload a file that has no .pdf extension."
 * solve challenge 27 first
 
 Repeat the first steps from challenge 27 and intercept the packet again. Change `filename="random.pdf"` to something else. Solved.
 
-#### 29: "Log in with Bjoern's user account without previously changing his password, applying SQL Injection, or hacking his Google account."
+#### 28: "Log in with Bjoern's user account without previously changing his password, applying SQL Injection, or hacking his Google account."
 * solve challenge 6 first
 
 Log in with some valid Google Account account `Log in with Google`. Intercept the packets with Burp. Look at the packet that contains a `POST` to `/api/Users/`. In this packet, apparently the new user get's put into the Juice Shop user database. You can see that the password here is not the one you used for the Google login (the Juice Shop never sees this password). So it had to be created somehow ... After playing around a little with different encodings, you can find out that this password is the mail address, encoded with base64.
@@ -322,7 +319,7 @@ Let's try to apply this to bjoern's mail address we can get from the `/adminstra
 
 ## 4 Star Challenges
 
-#### 30: "XSS Tier 4: Perform a persisted XSS attack bypassing a server-side security mechanism."
+#### 29: "XSS Tier 4: Perform a persisted XSS attack bypassing a server-side security mechanism."
 * solve challenge 24 first
 
 Let's see what the developer implemented on the server side: "sanitize-html": "1.4.2"
@@ -340,10 +337,26 @@ Plus, we need another end tag `</script>` before the last closing script tag to 
 
 You can post this under "Contact Us" to solve the challenge.
 
-#### 31: "Wherever you go, there you are."
+#### 30: "Wherever you go, there you are."
 * no pre-solved challenge necessary
 
 The ribbon in the top right corner "Fork me on Github" contains the link `/redirect?to=https://github.com/bkimminich/juice-shop`. As always, when tampering with URLs, we should try null-bytes `%00`. When going to `/redirect?to=/%00https://github.com/bkimminich/juice-shop`, we give the redirect a valid target `https://github.com/bkimminich/juice-shop`, but keep it from actually going there.
+
+#### 31: "Change Bender's password into slurmCl4ssic."
+* not solved yet
+
+* solve challenge 15 first
+* be logged in as Bender
+
+When changing the password, we can intercept a packet with a GET request like this:
+`GET /rest/user/change-password?current=idontknow&new=slurmCl4ssic&repeat=slurmCl4ssic`
+
+Let's remove the current parameter and see if it still gets accepted ...
+`GET /rest/user/change-password?new=slurmCl4ssic&repeat=slurmCl4ssic`
+
+Yes, the password still changes. So now we changed the password without knowing the old one.
+
+> NOTE: The md5 hash of "slurmCl4ssic" is 06b0c5c1922ed4ed62a5449dd209c96d. Although Hashkiller currently has no entry for the reversal of this hash, the unsalted "slurmCl4ssic" password is not a safe password as it might be added to the database one day.
 
 #### 32: "Apply some advanced cryptanalysis to find the real easter egg."
 * solve challenge 25 first
@@ -393,6 +406,21 @@ We can find `tlh.json` with this method and solve the challenge (tlh is Klingon)
 Login with a valid Google Account and intercept the communication with Burp.
 Look at the packet containing the `POST` to `/rest/user/login` and manually add the Header: `X-User-Email: ciso@juice-sh.op`. You can leave the Body like it is `({"email":"something@gmail.com","password":"c29tZXRoaW5nQGdtYWlsLmNvbQ==","oauth":true})`.
 
+```
+POST /rest/user/login HTTP/1.1
+Host: 192.168.99.100:3000
+User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:45.0) Gecko/20100101 Firefox/45.0
+Accept: application/json, text/plain, */*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Content-Type: application/json;charset=utf-8
+Referer: http://192.168.99.100:3000/
+X-User-Email: ciso@juice-sh.op
+Content-Length: 88
+Connection: close
+
+{"email":"something@gmail.com","password":"c29tZXRoaW5nQGdtYWlsLmNvbQ==","oauth":true}
+```
 
 <!------------------------------- 5 Star Challenges ------------------------------->
 
@@ -424,5 +452,12 @@ z85 -e "NOV16-90"
 ```
 
 This string will give you a z85 encoded value of `pes[Bhz3{y`. Enter it in the coupon option and solve the challenge.
+
 #### 36: "Fake a continue code that solves only (the non-existent) challenge #99."
 * Not solved yet.
+
+#### 37: "Log in with the support team's original user credentials without applying SQL Injection or any other bypass."
+* Not solved yet.
+
+Download the kdbx file from the FTP Server (`/ftp/incident-support.kdbx%2500.md`).
+The account Email is `support@juice-sh.op` (found on `http://192.168.99.100:3000/#/administration`).
