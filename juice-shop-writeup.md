@@ -5,8 +5,8 @@
 * influenced by [7 Minute Security (Episode #230)](https://7ms.us/7ms-230-pentesting-owasp-juice-shop-part-1/)
 * current status:
   * v2.19.1
-  * 35/37 challenges solved (95%)
-  * Continue Code: n2HouohDtzc5IqT6CXsNFwi2fpSEURHvubhMtEcWIBTkCnsaF4imfrSDUnH6uBh9tNcxTo
+  * 36/37 challenges solved (97%)
+  * Continue Code: laHquqhrtJcOInTvC6sjFEi8fESZUnHVuLh2tDcNIETMCvslFxiBfbSJUJH3uJhYtKcgIQTz
 
 ## Tools
 * Kali Linux (2016.2) tools:
@@ -215,7 +215,9 @@ Log in as any user (a self-registered user also works). Turn on Burp Intercept. 
 #### 21: "Access a developer's forgotten backup file."
 * solve challenge 11 first
 
-Download "package.json.bak" with the same technique as described in challenge 11: "Access a salesman's forgotten backup file."
+Download "package.json.bak" with the same technique as described in challenge 11: "Access a salesman's forgotten backup file." This package.json file contains the used libraries and their versions.
+
+> This is a gold nugget for us ...
 
 #### 22: "Change the href of the link within the O-Saft product description into `http://kimminich.de`."
 * solve challenge 17 first
@@ -452,7 +454,23 @@ z85 -e "NOV16-90"
 This string will give you a z85 encoded value of `pes[Bhz3{y`. Enter it in the coupon option and solve the challenge.
 
 #### 36: "Fake a continue code that solves only (the non-existent) challenge #99."
-* Not solved yet.
+* Solve challenge 21 first.
+
+In the package.json from the ftp Server we can find that `hashids` was used. Some searching on the web brings us to this site : `http://hashids.org/`. On the demo site, we can play around with the hashing mechanism. A number can be specified (default is `8`) that determines the length of the output hash. The continue codes are 60 chars long, so let's replace 8 with 60. Let's try decoding any currently valid continue code by changing the variable `numbers` ...
+``` JavaScript
+var numbers = hashids.decode("1ZQmmZnR751JxwB4KjXVoQMzD8AWqH3u4G6LYgl29OvP3aENeqWpbykroVl3");
+```
+This continue code gets decoded to `[1,2,34]`. These look like the numbers of currently solved challenges!
+
+> You should note your numbers (your currently solved challenges) somewhere to be able to restore your progress later.
+
+Let's try and encode only the number `99` with the same parameters _("this is ...", 60, "abcdef ...")_.
+``` JavaScript
+var id = hashids.encode(99);
+```
+The resulting continue code `69OxrZ8aJEgxONZyWoz1Dw4BvXmRGkKgGe9M7k2rK63YpqQLPjnlb5V5LvDj` solves the challenge.
+
+> To restore your progress, just forge another continue code with the numbers you noted down before.
 
 #### 37: "Log in with the support team's original user credentials without applying SQL Injection or any other bypass."
 * Not solved yet.
